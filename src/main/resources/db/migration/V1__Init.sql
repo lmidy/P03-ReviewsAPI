@@ -6,11 +6,11 @@ CREATE TABLE products(
 
 CREATE TABLE reviews(
     review_id INT NOT NULL AUTO_INCREMENT,
-    review_title VARCHAR(255) NOT NULL,
+    review_title VARCHAR(255),
     PRIMARY KEY (review_id),
-    product_id INT NOT Null,
-    FOREIGN KEY (product_id)
-    REFERENCES products(product_id);
+    product_id INT NOT NULL,
+    FOREIGN KEY(product_id)
+    REFERENCES products(product_id)
 );
 
 CREATE TABLE comments(
