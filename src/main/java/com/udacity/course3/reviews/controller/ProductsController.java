@@ -18,7 +18,6 @@ import java.util.List;
 @RequestMapping("/products")
 public class ProductsController {
 
-    // TODO: Wire JPA repositories here
     @Autowired
     private ProductRepository productRepository;
 
@@ -42,8 +41,8 @@ public class ProductsController {
      * @return The product if found, or a 404 not found.
      */
     @RequestMapping(value = "/{id}")
-    public ResponseEntity<?> findById(@PathVariable("id") Integer id) {
-        return ResponseEntity.ok(productRepository.findById(id));
+    public ResponseEntity<Product> findById(@PathVariable("id") Integer id) {
+        return ResponseEntity.of(productRepository.findById(id));
     }
 
     /**

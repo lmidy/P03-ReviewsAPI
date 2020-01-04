@@ -17,7 +17,6 @@ import java.util.Optional;
 @RestController
 public class ReviewsController {
 
-    // TODO: Wire JPA repositories here
     @Autowired
     private ReviewRepository reviewRepository;
 
@@ -36,7 +35,7 @@ public class ReviewsController {
      * @return The created review or 404 if product id is not found.
      */
     @RequestMapping(value = "/reviews/products/{productId}", method = RequestMethod.POST)
-    public ResponseEntity<?> createReviewForProduct(@PathVariable("productId") Integer productId, @RequestBody Review review) {
+    public ResponseEntity<Review> createReviewForProduct(@PathVariable("productId") Integer productId, @RequestBody Review review) {
     Optional<Product> optionalProduct = productRepository.findById(productId);
 
     if(!optionalProduct.isPresent())
@@ -54,7 +53,7 @@ public class ReviewsController {
      * @return The list of reviews.
      */
     @RequestMapping(value = "/reviews/products/{productId}", method = RequestMethod.GET)
-    public ResponseEntity<List<?>> listReviewsForProduct(@PathVariable("productId") Integer productId) {
+    public ResponseEntity<List<Review>> listReviewsForProduct(@PathVariable("productId") Integer productId) {
         Optional<Product> optionalProduct = productRepository.findById(productId);
 
         if (!optionalProduct.isPresent())
