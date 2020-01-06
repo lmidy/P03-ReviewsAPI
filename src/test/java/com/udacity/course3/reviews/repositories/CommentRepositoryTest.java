@@ -30,14 +30,14 @@ public class CommentRepositoryTest {
         Review review = this.getReview();
 
         Comment comment = new Comment();
-        comment.setCommentString("");
+        comment.setComment("");
         comment.setReview(review);
 
         this.entityManager.persist(comment);
 
         List<Comment> comments = commentRepository.findAllByReviewId(review.getId());
         assertNotNull(comments);
-        assertEquals(comment.getCommentString(), comments.get(0).getCommentString());
+        assertEquals(comment.getComment(), comments.get(0).getComment());
         assertEquals(comment.getReview().getId(), review.getId());
     }
 

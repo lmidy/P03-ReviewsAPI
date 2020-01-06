@@ -2,7 +2,10 @@ package com.udacity.course3.reviews.controller;
 
 import com.udacity.course3.reviews.entity.Comment;
 import com.udacity.course3.reviews.entity.Review;
+import com.udacity.course3.reviews.models.CommentModel;
+import com.udacity.course3.reviews.models.ReviewModel;
 import com.udacity.course3.reviews.repository.CommentRepository;
+import com.udacity.course3.reviews.repository.MongoReviewRepository;
 import com.udacity.course3.reviews.repository.ProductRepository;
 import com.udacity.course3.reviews.repository.ReviewRepository;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -31,13 +34,16 @@ public class CommentsController {
     @Autowired
     private ProductRepository productRepository;
 
+    @Autowired
+    private MongoReviewRepository mongoReviewRepository;
+
     /**
      * Creates a comment for a review.
      *
      * 1. Add argument for comment entity. Use {@link RequestBody} annotation.
      * 2. Check for existence of review.
      * 3. If review not found, return NOT_FOUND.
-     * 4. If found, save comment.
+     * 4. If found, save comment in mysql and save in MONGODB.
      *
      * @param reviewId The id of the review.
      */
@@ -50,8 +56,17 @@ public class CommentsController {
             return ResponseEntity.notFound().build();
         }
         comment.setReview(optionalReview.get());
+        commentRepository.save(comment);
 
-        return ResponseEntity.ok(commentRepository.save(comment));
+        Optional<ReviewModel> optionalReviewModel = mongoReviewRepository.findById(reviewId);
+        if(!optionalReviewModel.isPresent()){
+            return ResponseEntity.notFound().build();
+        }
+        ReviewModel reviewModel=optionalReviewModel.get();
+        reviewModel.addCommentModels(new CommentModel(comment));
+        mongoReviewRepository.save(reviewModel);
+
+        return ResponseEntity.ok().build();
     }
 
     /**

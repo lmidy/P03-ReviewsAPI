@@ -2,6 +2,8 @@ package com.udacity.course3.reviews.controller;
 
 import com.udacity.course3.reviews.entity.Product;
 import com.udacity.course3.reviews.entity.Review;
+import com.udacity.course3.reviews.models.ReviewModel;
+import com.udacity.course3.reviews.repository.MongoReviewRepository;
 import com.udacity.course3.reviews.repository.ProductRepository;
 import com.udacity.course3.reviews.repository.ReviewRepository;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -23,6 +25,9 @@ public class ReviewsController {
     @Autowired
     private ProductRepository productRepository;
 
+    @Autowired
+    private MongoReviewRepository mongoReviewRepository;
+
     /**
      * Creates a review for a product.
      * <p>
@@ -42,23 +47,29 @@ public class ReviewsController {
         return ResponseEntity.notFound().build();
 
     review.setProduct(optionalProduct.get());
+    reviewRepository.save(review);
 
-    return ResponseEntity.ok(reviewRepository.save(review));
+    ReviewModel reviewModel = new ReviewModel(review);
+    mongoReviewRepository.save(reviewModel);
+
+    return ResponseEntity.ok().build();
     }
 
     /**
-     * Lists reviews by product.
+     * Lists reviews by product from MongoDB
      *
      * @param productId The id of the product.
-     * @return The list of reviews.
+     * @return The list of reviews from MONGODB
      */
     @RequestMapping(value = "/reviews/products/{productId}", method = RequestMethod.GET)
-    public ResponseEntity<List<Review>> listReviewsForProduct(@PathVariable("productId") Integer productId) {
+    public ResponseEntity<List<?>> listReviewsForProduct(@PathVariable("productId") Integer productId) {
         Optional<Product> optionalProduct = productRepository.findById(productId);
 
         if (!optionalProduct.isPresent())
             return ResponseEntity.notFound().build();
 
-        return ResponseEntity.ok(reviewRepository.findAllByProductId(productId));
+        List<Integer> reviewIds = reviewRepository.findIdByProductId(productId);
+        List<ReviewModel> reviews = (List<ReviewModel>) mongoReviewRepository.findAllById(reviewIds);
+        return ResponseEntity.ok(reviews);
     }
 }
