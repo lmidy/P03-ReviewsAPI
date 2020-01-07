@@ -3,15 +3,13 @@ package com.udacity.course3.reviews.repositories;
 import com.udacity.course3.reviews.entity.Comment;
 import com.udacity.course3.reviews.entity.Product;
 import com.udacity.course3.reviews.entity.Review;
-import com.udacity.course3.reviews.models.CommentModel;
-import com.udacity.course3.reviews.models.ReviewModel;
+import com.udacity.course3.reviews.model.CommentModel;
+import com.udacity.course3.reviews.model.ReviewModel;
 import com.udacity.course3.reviews.repository.MongoReviewRepository;
-import com.udacity.course3.reviews.repository.ProductRepository;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.data.mongo.DataMongoTest;
-import org.springframework.boot.test.autoconfigure.restdocs.AutoConfigureRestDocs;
 import org.springframework.test.context.junit4.SpringRunner;
 
 import java.util.List;

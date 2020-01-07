@@ -1,4 +1,4 @@
-package com.udacity.course3.reviews.models;
+package com.udacity.course3.reviews.model;
 
 import com.udacity.course3.reviews.entity.Comment;
 
