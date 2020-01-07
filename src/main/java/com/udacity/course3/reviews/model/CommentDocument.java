@@ -6,7 +6,7 @@ import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 
-public class CommentModel {
+public class CommentDocument {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -14,10 +14,10 @@ public class CommentModel {
 
     private String comment;
 
-    public CommentModel() {
+    public CommentDocument() {
     }
 
-    public CommentModel(Comment comment){
+    public CommentDocument(Comment comment){
         this.id = comment.getId();
         this.comment = comment.getComment();
     }
