@@ -12,7 +12,7 @@ public class Comment {
     private int id;
 
     @Column(name = "comment_text")
-    private String commentString;
+    private String comment;
 
     @ManyToOne
     @JoinColumn(name = "review_id")
@@ -34,16 +34,21 @@ public class Comment {
         this.review = review;
     }
 
-    public void setCommentString(String commentString) {
-        this.commentString = commentString;
+    public void setComment(String comment) {
+        this.comment = comment;
     }
 
-    public String getCommentString() {
-        return commentString;
+    public String getComment() {
+        return comment;
     }
 
     @Override
     public String toString() {
-        return super.toString();
+
+        return "Comment{" +
+                "id=" + id +
+                ", commentText='" + comment + '\'' +
+                ", review=" + review +
+                '}';
     }
 }

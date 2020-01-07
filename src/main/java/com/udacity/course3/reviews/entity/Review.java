@@ -45,6 +45,10 @@ public class Review {
 
     @Override
     public String toString() {
-        return super.toString();
+      return "Review{" +
+                "id=" + id +
+                ", title='" + reviewTitle + '\'' +
+                ", product=" + product +
+                '}';
     }
 }

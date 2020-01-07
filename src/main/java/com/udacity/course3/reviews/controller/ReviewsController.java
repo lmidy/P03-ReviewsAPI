@@ -2,6 +2,8 @@ package com.udacity.course3.reviews.controller;
 
 import com.udacity.course3.reviews.entity.Product;
 import com.udacity.course3.reviews.entity.Review;
+import com.udacity.course3.reviews.model.ReviewModel;
+import com.udacity.course3.reviews.repository.MongoReviewRepository;
 import com.udacity.course3.reviews.repository.ProductRepository;
 import com.udacity.course3.reviews.repository.ReviewRepository;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -17,12 +19,14 @@ import java.util.Optional;
 @RestController
 public class ReviewsController {
 
-    // TODO: Wire JPA repositories here
     @Autowired
     private ReviewRepository reviewRepository;
 
     @Autowired
     private ProductRepository productRepository;
+
+    @Autowired
+    private MongoReviewRepository mongoReviewRepository;
 
     /**
      * Creates a review for a product.
@@ -36,22 +40,26 @@ public class ReviewsController {
      * @return The created review or 404 if product id is not found.
      */
     @RequestMapping(value = "/reviews/products/{productId}", method = RequestMethod.POST)
-    public ResponseEntity<?> createReviewForProduct(@PathVariable("productId") Integer productId, @RequestBody Review review) {
+    public ResponseEntity<Review> createReviewForProduct(@PathVariable("productId") Integer productId, @RequestBody Review review) {
     Optional<Product> optionalProduct = productRepository.findById(productId);
 
     if(!optionalProduct.isPresent())
         return ResponseEntity.notFound().build();
-
+    //this saves review for passed product id to mysql
     review.setProduct(optionalProduct.get());
+    reviewRepository.save(review);
+    //this saves review to mongodb for that review
+    ReviewModel reviewModel = new ReviewModel(review);
+    mongoReviewRepository.save(reviewModel);
 
-    return ResponseEntity.ok(reviewRepository.save(review));
+    return ResponseEntity.ok().build();
     }
 
     /**
-     * Lists reviews by product.
+     * Lists reviews by product from MongoDB
      *
      * @param productId The id of the product.
-     * @return The list of reviews.
+     * @return The list of reviews from MONGODB
      */
     @RequestMapping(value = "/reviews/products/{productId}", method = RequestMethod.GET)
     public ResponseEntity<List<?>> listReviewsForProduct(@PathVariable("productId") Integer productId) {
@@ -59,7 +67,9 @@ public class ReviewsController {
 
         if (!optionalProduct.isPresent())
             return ResponseEntity.notFound().build();
-
-        return ResponseEntity.ok(reviewRepository.findAllByProductId(productId));
+       //this reads from productid from mysql and the actual reviews from mongodb
+        List<Integer> reviewIds = reviewRepository.findIdByProductId(productId);
+        List<ReviewModel> reviews = (List<ReviewModel>) mongoReviewRepository.findAllById(reviewIds);
+        return ResponseEntity.ok(reviews);
     }
 }
