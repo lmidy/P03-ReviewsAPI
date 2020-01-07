@@ -2,7 +2,7 @@ package com.udacity.course3.reviews.controller;
 
 import com.udacity.course3.reviews.entity.Product;
 import com.udacity.course3.reviews.entity.Review;
-import com.udacity.course3.reviews.model.ReviewModel;
+import com.udacity.course3.reviews.model.ReviewDocument;
 import com.udacity.course3.reviews.repository.MongoReviewRepository;
 import com.udacity.course3.reviews.repository.ProductRepository;
 import com.udacity.course3.reviews.repository.ReviewRepository;
@@ -49,8 +49,8 @@ public class ReviewsController {
     review.setProduct(optionalProduct.get());
     reviewRepository.save(review);
     //this saves review to mongodb for that review
-    ReviewModel reviewModel = new ReviewModel(review);
-    mongoReviewRepository.save(reviewModel);
+    ReviewDocument reviewDocument = new ReviewDocument(review);
+    mongoReviewRepository.save(reviewDocument);
 
     return ResponseEntity.ok().build();
     }
@@ -69,7 +69,7 @@ public class ReviewsController {
             return ResponseEntity.notFound().build();
        //this reads from productid from mysql and the actual reviews from mongodb
         List<Integer> reviewIds = reviewRepository.findIdByProductId(productId);
-        List<ReviewModel> reviews = (List<ReviewModel>) mongoReviewRepository.findAllById(reviewIds);
+        List<ReviewDocument> reviews = (List<ReviewDocument>) mongoReviewRepository.findAllById(reviewIds);
         return ResponseEntity.ok(reviews);
     }
 }

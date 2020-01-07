@@ -2,8 +2,8 @@ package com.udacity.course3.reviews.controller;
 
 import com.udacity.course3.reviews.entity.Comment;
 import com.udacity.course3.reviews.entity.Review;
-import com.udacity.course3.reviews.model.CommentModel;
-import com.udacity.course3.reviews.model.ReviewModel;
+import com.udacity.course3.reviews.model.CommentDocument;
+import com.udacity.course3.reviews.model.ReviewDocument;
 import com.udacity.course3.reviews.repository.CommentRepository;
 import com.udacity.course3.reviews.repository.MongoReviewRepository;
 import com.udacity.course3.reviews.repository.ProductRepository;
@@ -55,12 +55,12 @@ public class CommentsController {
         comment.setReview(optionalReview.get());
         commentRepository.save(comment);
 
-        Optional<ReviewModel> optionalReviewModel = mongoReviewRepository.findById(reviewId);
+        Optional<ReviewDocument> optionalReviewModel = mongoReviewRepository.findById(reviewId);
         if(!optionalReviewModel.isPresent()){
             return ResponseEntity.notFound().build();
         }
-        ReviewModel reviewModel = optionalReviewModel.get();
-        reviewModel.addCommentModels(new CommentModel(comment));
+        ReviewDocument reviewModel = optionalReviewModel.get();
+        reviewModel.addCommentDocument(new CommentDocument(comment));
         mongoReviewRepository.save(reviewModel);
 
         return ResponseEntity.ok().build();

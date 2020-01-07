@@ -11,7 +11,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 @Document(collection = "reviews")
-public class ReviewModel {
+public class ReviewDocument {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -21,25 +21,21 @@ public class ReviewModel {
 
     private Product product;
 
-    private List<CommentModel> commentModels;
+    private List<CommentDocument> commentDocuments;
 
-    public ReviewModel() {
-        commentModels= new ArrayList<>();
+    public ReviewDocument() {
+        commentDocuments = new ArrayList<>();
     }
-    public ReviewModel(Review review){
+    public ReviewDocument(Review review){
         this.id = review.getId();
         this.reviewTitle = review.getReviewTitle();
         this.product = review.getProduct();
-        this.commentModels = new ArrayList<>();
+        this.commentDocuments = new ArrayList<>();
     }
 
     public int getId() {
         return id;
     }
-
-  /*  public void setId(Integer id) {
-        this.id = id;
-    }*/
 
     public String getReviewTitle() {
         return reviewTitle;
@@ -57,11 +53,11 @@ public class ReviewModel {
         this.product = product;
     }
 
-    public List<CommentModel> getCommentModels() {
-        return commentModels;
+    public List<CommentDocument> getCommentDocuments() {
+        return commentDocuments;
     }
 
-    public void addCommentModels(CommentModel commentModel) {
-        commentModels.add(commentModel);
+    public void addCommentDocument(CommentDocument commentDocument) {
+        commentDocuments.add(commentDocument);
     }
 }

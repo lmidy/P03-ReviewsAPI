@@ -3,8 +3,8 @@ package com.udacity.course3.reviews.repositories;
 import com.udacity.course3.reviews.entity.Comment;
 import com.udacity.course3.reviews.entity.Product;
 import com.udacity.course3.reviews.entity.Review;
-import com.udacity.course3.reviews.model.CommentModel;
-import com.udacity.course3.reviews.model.ReviewModel;
+import com.udacity.course3.reviews.model.CommentDocument;
+import com.udacity.course3.reviews.model.ReviewDocument;
 import com.udacity.course3.reviews.repository.MongoReviewRepository;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -39,17 +39,17 @@ public class MongoReviewRepositoryTest {
         comment.setComment("Great battery use, easy on hands");
         comment.setReview(review);
 
-        ReviewModel reviewModel = new ReviewModel(review);
-        reviewModel.addCommentModels(new CommentModel(comment));
+        ReviewDocument reviewModel = new ReviewDocument(review);
+        reviewModel.addCommentDocument(new CommentDocument(comment));
 
-        ReviewModel savedReviewInfo = mongoReviewRepository.save(reviewModel);
+        ReviewDocument savedReviewInfo = mongoReviewRepository.save(reviewModel);
         assertEquals(reviewModel.getReviewTitle(), savedReviewInfo.getReviewTitle());
         assertEquals(reviewModel.getProduct(), savedReviewInfo.getProduct());
-        assertEquals(reviewModel.getCommentModels(), savedReviewInfo.getCommentModels());
+        assertEquals(reviewModel.getCommentDocuments(), savedReviewInfo.getCommentDocuments());
 
-        List<ReviewModel> reviews = mongoReviewRepository.findAll();
+         List<ReviewDocument> reviews = mongoReviewRepository.findAll();
         assertNotNull(reviews);
-        ReviewModel retrievedReviewDoc = reviews.get(0);
+        ReviewDocument retrievedReviewDoc = reviews.get(0);
         assertEquals(reviewModel.getId(), retrievedReviewDoc.getId());
         assertEquals(reviewModel.getReviewTitle(), retrievedReviewDoc.getReviewTitle());
     }
